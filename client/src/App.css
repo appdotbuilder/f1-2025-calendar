@@ -3,99 +3,213 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 0 85% 60%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+}
 
+@layer base {
+  * {
+    @apply border-border;
+  }
   body {
-    background: linear-gradient(135deg, #0c0c0c 0%, #1a0a0a 50%, #0f0f0f 100%);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(220, 38, 127, 0.6);
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(220, 38, 127, 0.8);
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 @layer components {
-  /* Glassmorphism effect */
-  .glass-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .glassmorphism {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
   }
-
-  .glass-card-hover {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(220, 38, 127, 0.3);
+  
+  .glassmorphism-dark {
+    @apply bg-black/40 backdrop-blur-md border border-red-500/30;
   }
-
-  /* F1 red gradient */
+  
   .f1-gradient {
-    background: linear-gradient(135deg, #dc267f 0%, #fe6b8b 100%);
+    background: linear-gradient(135deg, #000000 0%, #450a0a 25%, #7f1d1d 50%, #450a0a 75%, #000000 100%);
+  }
+  
+  .f1-card-hover {
+    @apply transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20;
+  }
+  
+  .position-gold {
+    @apply bg-gradient-to-r from-yellow-400 to-yellow-500 text-black;
+  }
+  
+  .position-silver {
+    @apply bg-gradient-to-r from-gray-300 to-gray-400 text-black;
+  }
+  
+  .position-bronze {
+    @apply bg-gradient-to-r from-orange-400 to-orange-500 text-black;
+  }
+  
+  .position-points {
+    @apply bg-gradient-to-r from-green-500 to-green-600 text-white;
+  }
+  
+  .racing-stripes {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(239, 68, 68, 0.1) 10px,
+      rgba(239, 68, 68, 0.1) 20px
+    );
+  }
+  
+  .checkered-flag {
+    background-image: 
+      linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000),
+      linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    opacity: 0.05;
   }
 
-  /* F1 dark gradient */
-  .f1-dark-gradient {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-black/20 rounded-lg;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-red-600/60 rounded-lg hover:bg-red-600/80;
   }
 
-  /* Animated background particles */
-  .particles {
-    position: fixed;
+  /* Animations */
+  @keyframes race-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+  }
+  
+  .race-pulse {
+    animation: race-pulse 2s ease-in-out infinite;
+  }
+
+  /* Team colors */
+  .team-red-bull {
+    @apply border-l-4 border-l-blue-600 bg-blue-950/20;
+  }
+  
+  .team-ferrari {
+    @apply border-l-4 border-l-red-600 bg-red-950/20;
+  }
+  
+  .team-mercedes {
+    @apply border-l-4 border-l-cyan-400 bg-cyan-950/20;
+  }
+  
+  .team-mclaren {
+    @apply border-l-4 border-l-orange-500 bg-orange-950/20;
+  }
+  
+  .team-aston-martin {
+    @apply border-l-4 border-l-green-600 bg-green-950/20;
+  }
+  
+  /* Typography */
+  .f1-title {
+    font-family: 'Formula1', 'Arial Black', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  
+  /* Button variants */
+  .btn-f1-primary {
+    @apply bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-6 py-3 rounded-lg border border-red-500/50 backdrop-blur-sm shadow-lg shadow-red-500/25 transition-all duration-300;
+  }
+  
+  .btn-f1-secondary {
+    @apply bg-black/40 hover:bg-black/60 text-red-200 hover:text-white font-semibold px-4 py-2 rounded-lg border border-red-500/30 backdrop-blur-sm transition-all duration-300;
+  }
+
+  /* Loading spinner */
+  .f1-spinner {
+    border: 3px solid rgba(239, 68, 68, 0.3);
+    border-radius: 50%;
+    border-top: 3px solid #ef4444;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Grid patterns */
+  .grid-pattern {
+    background-image: 
+      linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Result position styling */
+  .result-row {
+    @apply relative overflow-hidden;
+  }
+  
+  .result-row::before {
+    content: '';
+    position: absolute;
     top: 0;
-    left: 0;
+    left: -100%;
     width: 100%;
     height: 100%;
-    pointer-events: none;
-    z-index: -1;
+    background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.1), transparent);
+    transition: left 0.5s ease-in-out;
+  }
+  
+  .result-row:hover::before {
+    left: 100%;
   }
 
-  .particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: rgba(220, 38, 127, 0.3);
-    border-radius: 50%;
-    animation: float 6s ease-in-out infinite;
+  /* Card shadow effects */
+  .card-glow {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
   }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-    50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
-  }
-
-  /* Status indicators */
-  .status-upcoming {
-    background: rgba(59, 130, 246, 0.2);
-    color: #93c5fd;
-    border-color: rgba(59, 130, 246, 0.3);
-  }
-
-  .status-live {
-    background: rgba(16, 185, 129, 0.2);
-    color: #6ee7b7;
-    border-color: rgba(16, 185, 129, 0.3);
-    animation: pulse 2s infinite;
-  }
-
-  .status-completed {
-    background: rgba(107, 114, 128, 0.2);
-    color: #d1d5db;
-    border-color: rgba(107, 114, 128, 0.3);
+  
+  .card-glow:hover {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);
   }
 }

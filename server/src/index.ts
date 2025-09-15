@@ -19,6 +19,7 @@ import { getRaceById } from './handlers/get_race_by_id';
 import { createRace } from './handlers/create_race';
 import { getRaceResults } from './handlers/get_race_results';
 import { createRaceResult } from './handlers/create_race_result';
+import { seedDatabase } from './handlers/seed_database';
 
 const t = initTRPC.create({
   transformer: superjson,
@@ -57,6 +58,10 @@ const appRouter = router({
   createRaceResult: publicProcedure
     .input(createRaceResultInputSchema)
     .mutation(({ input }) => createRaceResult(input)),
+
+  // Seed database with 2025 F1 season data (development helper)
+  seedDatabase: publicProcedure
+    .mutation(() => seedDatabase()),
 });
 
 export type AppRouter = typeof appRouter;
