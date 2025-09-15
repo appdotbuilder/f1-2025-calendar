@@ -1,41 +1,35 @@
+import { db } from '../db';
+import { raceResultsTable } from '../db/schema';
 import { type GetRaceResultsInput, type RaceResult } from '../schema';
+import { eq, and, asc, desc, isNull, type SQL } from 'drizzle-orm';
 
-export async function getRaceResults(input: GetRaceResultsInput): Promise<RaceResult[]> {
-    // This is a placeholder declaration! Real code should be implemented here.
-    // The goal of this handler is fetching race results for a specific race and result type.
-    // If result_type is not provided, return all results for the race.
-    // Results should be ordered by position (nulls last for DNF/DNS).
+export const getRaceResults = async (input: GetRaceResultsInput): Promise<RaceResult[]> => {
+  try {
+    // Build conditions array
+    const conditions: SQL<unknown>[] = [];
     
-    const mockResults: RaceResult[] = [
-        {
-            id: 1,
-            race_id: input.race_id,
-            result_type: input.result_type || 'race',
-            driver_name: "Max Verstappen",
-            team: "Red Bull Racing",
-            position: 1,
-            time: "1:31:12.345",
-            points: 25,
-            laps: 57,
-            grid_position: 1,
-            fastest_lap: true,
-            created_at: new Date()
-        },
-        {
-            id: 2,
-            race_id: input.race_id,
-            result_type: input.result_type || 'race',
-            driver_name: "Lewis Hamilton",
-            team: "Mercedes",
-            position: 2,
-            time: "+5.234",
-            points: 18,
-            laps: 57,
-            grid_position: 3,
-            fastest_lap: false,
-            created_at: new Date()
-        }
-    ];
+    // Always filter by race_id
+    conditions.push(eq(raceResultsTable.race_id, input.race_id));
     
-    return Promise.resolve(mockResults);
-}
+    // Add result_type filter if provided
+    if (input.result_type) {
+      conditions.push(eq(raceResultsTable.result_type, input.result_type));
+    }
+
+    // Build and execute query
+    const results = await db.select()
+      .from(raceResultsTable)
+      .where(and(...conditions))
+      .orderBy(
+        asc(raceResultsTable.position), // This puts nulls last by default in PostgreSQL
+        asc(raceResultsTable.id)
+      )
+      .execute();
+
+    // All fields are already in correct types from schema
+    return results;
+  } catch (error) {
+    console.error('Failed to fetch race results:', error);
+    throw error;
+  }
+};

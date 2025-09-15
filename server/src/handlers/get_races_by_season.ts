@@ -1,32 +1,21 @@
+import { db } from '../db';
+import { racesTable } from '../db/schema';
 import { type GetRacesBySeasonInput, type Race } from '../schema';
+import { eq, asc } from 'drizzle-orm';
 
-export async function getRacesBySeason(input: GetRacesBySeasonInput): Promise<Race[]> {
-    // This is a placeholder declaration! Real code should be implemented here.
-    // The goal of this handler is fetching all races for a specific season from the database,
-    // ordered by round number to maintain calendar order.
-    
-    return Promise.resolve([
-        {
-            id: 1,
-            name: "Bahrain Grand Prix",
-            circuit_name: "Bahrain International Circuit",
-            country: "Bahrain",
-            city: "Sakhir",
-            race_date: new Date("2025-03-16"),
-            race_time: "15:00",
-            practice1_date: new Date("2025-03-14"),
-            practice1_time: "11:30",
-            practice2_date: new Date("2025-03-14"),
-            practice2_time: "15:00",
-            practice3_date: new Date("2025-03-15"),
-            practice3_time: "11:30",
-            qualifying_date: new Date("2025-03-15"),
-            qualifying_time: "15:00",
-            sprint_date: null,
-            sprint_time: null,
-            season: input.season,
-            round: 1,
-            created_at: new Date()
-        } as Race
-    ]);
-}
+export const getRacesBySeason = async (input: GetRacesBySeasonInput): Promise<Race[]> => {
+  try {
+    // Query races for the specified season, ordered by round number
+    const results = await db.select()
+      .from(racesTable)
+      .where(eq(racesTable.season, input.season))
+      .orderBy(asc(racesTable.round))
+      .execute();
+
+    // Return the results (no numeric conversions needed as all fields are already correct types)
+    return results;
+  } catch (error) {
+    console.error('Failed to get races by season:', error);
+    throw error;
+  }
+};
